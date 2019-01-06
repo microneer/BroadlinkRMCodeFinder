@@ -1,0 +1,148 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Broadlink RM Code Finder</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <style>
+            body {
+                padding-top: 50px;
+                padding-bottom: 20px;
+            }
+        </style>
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    </head>
+    <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Broadlink RM Code Finder</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <!-- form class="navbar-form navbar-right" role="form">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          </form -->
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Broadlink RM Code Finder</h1>
+        <p>This tool calls the API provided by the <a href="https://play.google.com/store/apps/details?id=de.fun2code.android.rmbridge&hl=en" target="_blank">RM Bridge Android App</a> 
+		   so you can use a Broadlink device to read IR codes from many different remote controls and replay them through OpenHAB and the same or different Broadlink devices.</p>
+        <!--p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p-->
+      </div>
+    </div>
+
+    <div class="container">
+	  <h2>Instructions</h2>
+	  <ol>
+	  <li>Download, install and run the <a href="https://play.google.com/store/apps/details?id=de.fun2code.android.rmbridge&hl=en" target="_blank">RM Bridge Android App</a> 
+		onto a mobile phone or tablet on same network as your Broadlink device.
+	  </li>
+	  <li>
+		Press the start button in the RM Bridge app and enter the IP address and port number provided on the app's screen into the boxes below.
+	  </li>
+	  <li>
+		Press the <i>Find Broadlink devices</i> button. If all goes well you'll get a list of all your devices in the <i>Broadlink devices</i> section.
+	  </li>
+	  <li>
+		Select the device you want to learn with.
+	  </li>
+	  <li>
+		Optionally enter a code name in the <i>Code to learn</i> field. This would be the key you want to use for the code in your OpenHAB2 broadlink.map file.
+	  </li>
+	  <li>
+		Press the <i>Learn</i> button, and use your remote to send a command at the Broadlink RM device. If all goes well, in a few seconds you'll have the code in the <i>Recorded codes</i> section below.
+	  </li>
+	  <li>
+		Enter any other codes and learn them, then copy your newly-learnt codes to your broadlink.map file.
+	  </li>
+	  </ol>
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-3">
+          <h2>RM Bridge app connection</h2>
+		  <p>Enter the details from the RM Bridge App.</p>
+		  <form>
+			  <div class="form-group">
+				<label for="ipAddress">IP address</label>
+				<input class="form-control" id="ipAddress" placeholder="e.g. 192.168.1.1">
+			  </div>
+			  <div class="form-group">
+				<label for="port">Port</label>
+				<input class="form-control" id="port" placeholder="e.g. 7474">
+			  </div>
+			  <button id="findDevices" class="btn btn-primary">Find Broadlink devices</button>
+		  </form>
+		</div>
+        <div class="col-md-3">
+          <h2>Broadlink devices</h2>
+          <p>Select which device you want to use for code learning.</p>
+		  <form>
+			  <label for="sel1">Select a Broadlink device</label>
+			  <select class="form-control" id="deviceList">
+			  </select>
+		  </form>
+		</div>
+        <div class="col-md-3">
+		  <h2>Code learning</h2>
+		  <p>Enter the name of the code you'd like to learn. This will be the key in your OpenHAB2 broadlink.map file, and the code will be the value.</p>
+		  <form>
+			  <div class="form-group">
+				<label for="code">Code to learn</label>
+				<input class="form-control" id="code" placeholder="e.g.TV_POWER_ON">
+			  </div>
+			  <button id="learn" class="btn btn-primary">Learn</button>
+		  </form>
+        </div>
+        <div class="col-md-3">
+          <h2>Messages</h2>
+		    <div id="messageContainer">
+				<div class="alert alert-light" role="alert">
+					Nothing to report.
+				</div>
+			</div>
+        </div>
+      </div>
+
+      <hr>
+	  <div>
+        <h2>Recorded codes</h2>
+		<pre id="recordedCodes"></pre>
+	  </div>
+	  <hr>
+
+      <footer>
+        <p>by Michael Fielding, 2019, licensed as <a href="https://opensource.org/licenses/GPL-3.0">GPL-3.0</a></p>
+      </footer>
+    </div> <!-- /container -->        
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+
+        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
